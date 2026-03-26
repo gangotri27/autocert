@@ -1,1 +1,0 @@
-/home/ubuntu/autocert_ws/build/autocert_pipeline/launch/pipeline.launch.py

@@ -1,9 +1,0 @@
-source;share/autocert_experiment/hook/pythonpath.ps1
-source;share/autocert_experiment/hook/pythonpath.dsv
-source;share/autocert_experiment/hook/pythonpath.sh
-source;share/autocert_experiment/hook/ament_prefix_path.ps1
-source;share/autocert_experiment/hook/ament_prefix_path.dsv
-source;share/autocert_experiment/hook/ament_prefix_path.sh
-source;../../build/autocert_experiment/share/autocert_experiment/hook/pythonpath_develop.ps1
-source;../../build/autocert_experiment/share/autocert_experiment/hook/pythonpath_develop.dsv
-source;../../build/autocert_experiment/share/autocert_experiment/hook/pythonpath_develop.sh

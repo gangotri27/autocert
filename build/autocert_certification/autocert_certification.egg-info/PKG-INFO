@@ -1,8 +1,0 @@
-Metadata-Version: 2.1
-Name: autocert-certification
-Version: 0.0.0
-Summary: ISO 9283 certification report generation
-Maintainer: ubuntu
-Maintainer-email: kasturigangotri72@gmail.com
-License: BSD-3-Clause
-Provides-Extra: test

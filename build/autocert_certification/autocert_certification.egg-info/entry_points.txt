@@ -1,2 +1,0 @@
-[console_scripts]
-certification_node = autocert_certification.certification_node:main

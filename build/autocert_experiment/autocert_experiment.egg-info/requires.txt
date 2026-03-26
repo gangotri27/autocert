@@ -1,7 +1,0 @@
-numpy
-pandas
-pyyaml
-setuptools
-
-[test]
-pytest

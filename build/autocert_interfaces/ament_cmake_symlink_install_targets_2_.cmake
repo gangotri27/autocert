@@ -1,1 +1,0 @@
-ament_cmake_symlink_install_targets("TARGET_FILES" "/home/ubuntu/autocert_ws/build/autocert_interfaces/rosidl_generator_py/autocert_interfaces/autocert_interfaces_s__rosidl_typesupport_c.so" "TARGETS" "autocert_interfaces_s__rosidl_typesupport_c" "DESTINATION" "lib/python3.12/site-packages/autocert_interfaces")

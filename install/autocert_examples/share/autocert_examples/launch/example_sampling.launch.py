@@ -1,1 +1,0 @@
-/home/ubuntu/autocert_ws/src/autocert_examples/launch/example_sampling.launch.py

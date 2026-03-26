@@ -1,1 +1,0 @@
-/home/ubuntu/autocert_ws/build/autocert_interfaces/rosidl_typesupport_introspection_c/autocert_interfaces/srv/detail/batch_fk__rosidl_typesupport_introspection_c.h

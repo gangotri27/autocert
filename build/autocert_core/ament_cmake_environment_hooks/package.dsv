@@ -1,4 +1,0 @@
-source;share/autocert_core/local_setup.bash
-source;share/autocert_core/local_setup.dsv
-source;share/autocert_core/local_setup.sh
-source;share/autocert_core/local_setup.zsh

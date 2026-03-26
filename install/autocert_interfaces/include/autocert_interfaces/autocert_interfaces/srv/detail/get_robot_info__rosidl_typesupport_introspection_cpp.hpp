@@ -1,1 +1,0 @@
-/home/ubuntu/autocert_ws/build/autocert_interfaces/rosidl_typesupport_introspection_cpp/autocert_interfaces/srv/detail/get_robot_info__rosidl_typesupport_introspection_cpp.hpp

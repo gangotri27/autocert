@@ -1,1 +1,0 @@
-/home/ubuntu/autocert_ws/build/autocert_core/ament_cmake_environment_hooks/local_setup.bash

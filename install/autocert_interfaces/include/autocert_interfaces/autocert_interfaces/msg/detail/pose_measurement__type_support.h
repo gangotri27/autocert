@@ -1,1 +1,0 @@
-/home/ubuntu/autocert_ws/build/autocert_interfaces/rosidl_generator_c/autocert_interfaces/msg/detail/pose_measurement__type_support.h

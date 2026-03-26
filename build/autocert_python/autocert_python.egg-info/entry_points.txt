@@ -1,4 +1,0 @@
-[console_scripts]
-analyze_workspace = autocert_python.scripts.analyze_workspace:main
-calibrate_robot = autocert_python.scripts.calibrate_robot:main
-sample_workspace = autocert_python.scripts.sample_workspace:main
