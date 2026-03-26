@@ -1,0 +1,2 @@
+[console_scripts]
+evaluation_node = autocert_evaluation.evaluation_node:main

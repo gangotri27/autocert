@@ -1,0 +1,26 @@
+running develop
+running egg_info
+creating autocert_python.egg-info
+writing autocert_python.egg-info/PKG-INFO
+writing dependency_links to autocert_python.egg-info/dependency_links.txt
+writing entry points to autocert_python.egg-info/entry_points.txt
+writing requirements to autocert_python.egg-info/requires.txt
+writing top-level names to autocert_python.egg-info/top_level.txt
+writing manifest file 'autocert_python.egg-info/SOURCES.txt'
+reading manifest file 'autocert_python.egg-info/SOURCES.txt'
+writing manifest file 'autocert_python.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/ubuntu/autocert_ws/install/autocert_python/lib/python3.12/site-packages/autocert-python.egg-link (link to .)
+Installing analyze_workspace script to /home/ubuntu/autocert_ws/install/autocert_python/lib/autocert_python
+Installing calibrate_robot script to /home/ubuntu/autocert_ws/install/autocert_python/lib/autocert_python
+Installing sample_workspace script to /home/ubuntu/autocert_ws/install/autocert_python/lib/autocert_python
+
+Installed /home/ubuntu/autocert_ws/build/autocert_python
+running symlink_data
+creating /home/ubuntu/autocert_ws/install/autocert_python/share/ament_index
+creating /home/ubuntu/autocert_ws/install/autocert_python/share/ament_index/resource_index
+creating /home/ubuntu/autocert_ws/install/autocert_python/share/ament_index/resource_index/packages
+symbolically linking /home/ubuntu/autocert_ws/build/autocert_python/resource/autocert_python -> /home/ubuntu/autocert_ws/install/autocert_python/share/ament_index/resource_index/packages
+symbolically linking /home/ubuntu/autocert_ws/build/autocert_python/package.xml -> /home/ubuntu/autocert_ws/install/autocert_python/share/autocert_python
+creating /home/ubuntu/autocert_ws/install/autocert_python/share/autocert_python/launch
+creating /home/ubuntu/autocert_ws/install/autocert_python/share/autocert_python/config

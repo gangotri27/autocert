@@ -1,0 +1,119 @@
+-- The C compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found rclcpp: 28.1.16 (/opt/ros/jazzy/share/rclcpp/cmake)
+-- Found rosidl_generator_c: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+-- Found rosidl_generator_cpp: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found rmw_implementation_cmake: 7.3.3 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 8.4.3 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.13")  
+-- Found FastRTPS: /opt/ros/jazzy/include (Required is at least version "2.13") 
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Found moveit_ros_planning: 2.12.4 (/opt/ros/jazzy/share/moveit_ros_planning/cmake)
+-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: system filesystem date_time program_options thread chrono 
+-- Found parameter_traits: 0.6.0 (/opt/ros/jazzy/share/parameter_traits/cmake)
+-- Found rclcpp_lifecycle: 28.1.16 (/opt/ros/jazzy/share/rclcpp_lifecycle/cmake)
+-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: chrono date_time filesystem iostreams program_options regex serialization system thread 
+-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake (found version "1.83.0") found components: filesystem 
+-- Found Eigen3: TRUE (found version "3.4.0") 
+-- Ensuring Eigen3 include directory is part of orocos-kdl CMake target
+-- Found autocert_interfaces: 0.0.0 (/home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake)
+-- Found ament_lint_auto: 0.17.4 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+-- Added test 'copyright' to check source files copyright and LICENSE
+-- Added test 'cppcheck' to perform static code analysis on C / C++ code
+-- Configured cppcheck include dirs: $<BUILD_INTERFACE:/home/ubuntu/autocert_ws/src/autocert_core/include>
+-- Configured cppcheck exclude dirs and/or files: 
+-- Added test 'cpplint' to check C / C++ code against the Google style
+-- Configured cpplint exclude dirs and/or files: 
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'uncrustify' to check C / C++ code style
+-- Configured uncrustify additional arguments: 
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (18.5s)
+-- Generating done (0.2s)
+-- Build files have been written to: /home/ubuntu/autocert_ws/build/autocert_core
+[ 20%] [32mBuilding CXX object CMakeFiles/autocert_core.dir/src/workspace_sampler.cpp.o[0m
+[ 40%] [32mBuilding CXX object CMakeFiles/autocert_core.dir/src/collision_checker.cpp.o[0m
+In file included from [01m[K/home/ubuntu/autocert_ws/src/autocert_core/include/autocert_core/collision_checker.hpp:4[m[K,
+                 from [01m[K/home/ubuntu/autocert_ws/src/autocert_core/src/collision_checker.cpp:1[m[K:
+[01m[K/opt/ros/jazzy/include/moveit_core/moveit/planning_scene/planning_scene.h:50:77:[m[K [01;36m[Knote: [m[K‘[01m[K#pragma message: .h header is obsolete. Please use the .hpp header instead.[m[K’
+   50 | #pragma message(".h header is obsolete. Please use the .hpp header instead."[01;36m[K)[m[K
+      |                                                                             [01;36m[K^[m[K
+In file included from [01m[K/home/ubuntu/autocert_ws/src/autocert_core/src/collision_checker.cpp:2[m[K:
+[01m[K/opt/ros/jazzy/include/moveit_core/moveit/robot_state/robot_state.h:51:77:[m[K [01;36m[Knote: [m[K‘[01m[K#pragma message: .h header is obsolete. Please use the .hpp header instead.[m[K’
+   51 | #pragma message(".h header is obsolete. Please use the .hpp header instead."[01;36m[K)[m[K
+      |                                                                             [01;36m[K^[m[K
+In file included from [01m[K/home/ubuntu/autocert_ws/src/autocert_core/src/workspace_sampler.cpp:2[m[K:
+[01m[K/opt/ros/jazzy/include/moveit_core/moveit/robot_state/conversions.h:50:77:[m[K [01;36m[Knote: [m[K‘[01m[K#pragma message: .h header is obsolete. Please use the .hpp header instead.[m[K’
+   50 |  use the .hpp header instead."[01;36m[K)[m[K
+      |                               [01;36m[K^[m[K
+
+In file included from [01m[K/opt/ros/jazzy/include/rclcpp/rclcpp/logging.hpp:24[m[K,
+                 from [01m[K/opt/ros/jazzy/include/rclcpp/rclcpp/copy_all_parameter_values.hpp:27[m[K,
+                 from [01m[K/opt/ros/jazzy/include/rclcpp/rclcpp/rclcpp.hpp:171[m[K,
+                 from [01m[K/home/ubuntu/autocert_ws/src/autocert_core/include/autocert_core/workspace_sampler.hpp:4[m[K,
+                 from [01m[K/home/ubuntu/autocert_ws/src/autocert_core/src/workspace_sampler.cpp:1[m[K:
+[01m[K/home/ubuntu/autocert_ws/src/autocert_core/src/workspace_sampler.cpp:[m[K In member function ‘[01m[Kvoid autocert_core::WorkspaceSampler::[01;32m[KsetPlanningGroup[m[K(const std::string&)[m[K’:
+[01m[K/home/ubuntu/autocert_ws/src/autocert_core/src/workspace_sampler.cpp:120:5:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%llu[m[K’ expects argument of type ‘[01m[Klong long unsigned int[m[K’, but argument 6 has type ‘[01m[Kstd::__atomic_base<long unsigned int>::__int_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat=-Wformat=]8;;[m[K]
+  120 |     [01;35m[K"Switched to planning group: %s (version: %llu)"[m[K,
+      |     [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+  121 |     group_name.c_str(), [32m[Kstate_version_.load()[m[K);
+      |                         [32m[K~~~~~~~~~~~~~~~~~~~~~[m[K
+      |                                            [32m[K|[m[K
+      |                                            [32m[Kstd::__atomic_base<long unsigned int>::__int_type {aka long unsigned int}[m[K
+[01m[K/home/ubuntu/autocert_ws/src/autocert_core/src/workspace_sampler.cpp:120:50:[m[K [01;36m[Knote: [m[Kformat string is defined here
+  120 | ing group: %s (version: [01;36m[K%llu[m[K)",
+      |                         [01;36m[K~~~^[m[K
+      |                            [01;36m[K|[m[K
+      |                            [01;36m[Klong long unsigned int[m[K
+      |                         [32m[K%lu[m[K
+[ 60%] [32m[1mLinking CXX shared library libautocert_core.so[0m
+[ 60%] Built target autocert_core
+[ 80%] [32mBuilding CXX object CMakeFiles/batch_fk_server.dir/src/batch_fk_server.cpp.o[0m
+[100%] [32m[1mLinking CXX executable batch_fk_server[0m
+[100%] Built target batch_fk_server
+-- Install configuration: ""
+-- Execute custom install script
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/include/autocert_core/autocert_core/collision_checker.hpp
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/include/autocert_core/autocert_core/workspace_sampler.hpp
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/README.md
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/environment/library_path.sh
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/environment/library_path.dsv
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/ament_index/resource_index/package_run_dependencies/autocert_core
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/ament_index/resource_index/parent_prefix_path/autocert_core
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/environment/ament_prefix_path.sh
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/environment/ament_prefix_path.dsv
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/environment/path.sh
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/environment/path.dsv
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/local_setup.bash
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/local_setup.sh
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/local_setup.zsh
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/local_setup.dsv
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/package.dsv
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/ament_index/resource_index/packages/autocert_core
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/cmake/ament_cmake_export_libraries-extras.cmake
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/cmake/ament_cmake_export_targets-extras.cmake
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/cmake/autocert_coreConfig.cmake
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/cmake/autocert_coreConfig-version.cmake
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/package.xml
+-- Installing: /home/ubuntu/autocert_ws/install/autocert_core/lib/libautocert_core.so
+-- Set non-toolchain portion of runtime path of "/home/ubuntu/autocert_ws/install/autocert_core/lib/libautocert_core.so" to ""
+-- Installing: /home/ubuntu/autocert_ws/install/autocert_core/lib/autocert_core/batch_fk_server
+-- Set non-toolchain portion of runtime path of "/home/ubuntu/autocert_ws/install/autocert_core/lib/autocert_core/batch_fk_server" to ""
+-- Installing: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/cmake/export_autocert_coreExport.cmake
+-- Installing: /home/ubuntu/autocert_ws/install/autocert_core/share/autocert_core/cmake/export_autocert_coreExport-noconfig.cmake

@@ -1,0 +1,2 @@
+[console_scripts]
+experiment_node = autocert_experiment.experiment_node:main

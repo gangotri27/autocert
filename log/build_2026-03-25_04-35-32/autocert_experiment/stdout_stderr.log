@@ -1,0 +1,15 @@
+running develop
+running egg_info
+writing autocert_experiment.egg-info/PKG-INFO
+writing dependency_links to autocert_experiment.egg-info/dependency_links.txt
+writing entry points to autocert_experiment.egg-info/entry_points.txt
+writing requirements to autocert_experiment.egg-info/requires.txt
+writing top-level names to autocert_experiment.egg-info/top_level.txt
+reading manifest file 'autocert_experiment.egg-info/SOURCES.txt'
+writing manifest file 'autocert_experiment.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/ubuntu/autocert_ws/install/autocert_experiment/lib/python3.12/site-packages/autocert-experiment.egg-link (link to .)
+Installing experiment_node script to /home/ubuntu/autocert_ws/install/autocert_experiment/lib/autocert_experiment
+
+Installed /home/ubuntu/autocert_ws/build/autocert_experiment
+running symlink_data

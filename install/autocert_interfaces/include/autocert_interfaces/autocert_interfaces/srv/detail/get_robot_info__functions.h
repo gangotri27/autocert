@@ -1,0 +1,1 @@
+/home/ubuntu/autocert_ws/build/autocert_interfaces/rosidl_generator_c/autocert_interfaces/srv/detail/get_robot_info__functions.h

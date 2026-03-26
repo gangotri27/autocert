@@ -1,0 +1,25 @@
+# Experiment configuration for ISO 9283 testing
+
+# Pose generation strategy
+# Options: iso_cube, workspace_sampler, trajectory_test, calibration_grid
+strategy: iso_cube
+
+# ISO cube parameters (used if strategy = iso_cube)
+cube_size_mm: 50
+cube_center: [0.20, 0.0, 0.22] # x, y, z in mm
+pose_set: standard  # standard (5), extended (7), full (27)
+fixed_orientation: [0.0, 0.0, 0.0, 1.0]  # quaternion
+
+# Workspace sampling parameters (used if strategy = workspace_sampler)
+num_samples: 1000
+sampling_strategy: latin  # random, latin, halton, grid
+
+# Experiment parameters
+repetitions_per_pose: 5  # ISO 9283 requires 30
+settling_time_s: 2.0
+measurement_timeout_s: 5.0
+
+# ... existing fields ...
+random_backoff: true               # enable/disable random backoff
+backoff_range_m: 0.05              # meters
+backoff_attempts: 5                # retries if backoff fails

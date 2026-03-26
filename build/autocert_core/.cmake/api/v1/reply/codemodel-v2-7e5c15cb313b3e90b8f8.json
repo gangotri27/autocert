@@ -1,0 +1,88 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-9191e221a54ba9a3e45a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "autocert_core",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "autocert_core::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-autocert_core-625bf3a3a66743b950f2.json",
+					"name" : "autocert_core",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "autocert_core_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-autocert_core_uninstall-7262a0f3d2b5fe0cc848.json",
+					"name" : "autocert_core_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "batch_fk_server::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-batch_fk_server-bb66af6b11bb3613e2f5.json",
+					"name" : "batch_fk_server",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-4b3b207f944afb39a7eb.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/ubuntu/autocert_ws/build/autocert_core",
+		"source" : "/home/ubuntu/autocert_ws/src/autocert_core"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}

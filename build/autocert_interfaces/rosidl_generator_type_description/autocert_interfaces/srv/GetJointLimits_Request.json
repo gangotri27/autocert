@@ -1,0 +1,26 @@
+{
+  "type_description_msg": {
+    "type_description": {
+      "type_name": "autocert_interfaces/srv/GetJointLimits_Request",
+      "fields": [
+        {
+          "name": "planning_group",
+          "type": {
+            "type_id": 17,
+            "capacity": 0,
+            "string_capacity": 0,
+            "nested_type_name": ""
+          },
+          "default_value": ""
+        }
+      ]
+    },
+    "referenced_type_descriptions": []
+  },
+  "type_hashes": [
+    {
+      "type_name": "autocert_interfaces/srv/GetJointLimits_Request",
+      "hash_string": "RIHS01_23797eb59fe340f272712af203c7539bb2ac9c42112323a3391238865633e13c"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+Metadata-Version: 2.1
+Name: autocert-evaluation
+Version: 0.0.0
+Summary: ISO 9283 metric computation
+Maintainer: Gangotri
+Maintainer-email: kasturigangotri72@gmail.com
+License: BSD-3-Clause
+Provides-Extra: test

@@ -1,0 +1,2 @@
+[console_scripts]
+pipeline_node = autocert_pipeline.pipeline_node:main

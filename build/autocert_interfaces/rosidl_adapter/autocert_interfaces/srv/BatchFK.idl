@@ -1,0 +1,36 @@
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from autocert_interfaces/srv/BatchFK.srv
+// generated code does not contain a copyright notice
+
+#include "geometry_msgs/msg/Pose.idl"
+
+module autocert_interfaces {
+  module srv {
+    @verbatim (language="comment", text=
+      "Batch forward kinematics request")
+    struct BatchFK_Request {
+      int32 num_samples;
+
+      int32 num_joints;
+
+      sequence<double> joint_samples;
+
+      boolean filter_collisions;
+
+      string planning_group;
+    };
+    struct BatchFK_Response {
+      sequence<geometry_msgs::msg::Pose> poses;
+
+      sequence<int32> valid_indices;
+
+      string end_effector_link;
+
+      sequence<double> computation_time_ms;
+
+      int32 error_code;
+
+      string error_message;
+    };
+  };
+};

@@ -1,0 +1,26 @@
+# Robot Metadata Template
+
+# Robot identification
+manufacturer: "ROBOTIS"
+model: "OMX-6DOF"
+serial_number: ""
+software_version: "4"
+
+# Physical specifications
+payload_kg: 5.0
+reach_m: 0.85
+
+# Controller information
+controller_version: "CB3.12"
+
+# Test conditions
+laboratory: "AutoCert Lab"
+technician: "Automated System"
+temperature: 20.5
+humidity: 45
+measurement_system: "Leica AT960"
+calibration_date: "2024-01-15"
+
+# Robot model files (for hash computation)
+urdf_file: "~/autocert_ws/install/autocert_share/urdf/robot.urdf"
+srdf_file: "~/autocert_ws/install/autocert_share/config/robot.srdf"

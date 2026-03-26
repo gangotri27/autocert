@@ -1,0 +1,27 @@
+[4.819s] Invoking command in '/home/ubuntu/autocert_ws/build/autocert_certification': PYTHONPATH=/home/ubuntu/autocert_ws/build/autocert_certification/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ubuntu/autocert_ws/install/autocert_certification/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ubuntu/autocert_ws/build/autocert_certification/build --no-deps symlink_data
+[6.658s] running develop
+[8.104s] running egg_info
+[8.105s] creating autocert_certification.egg-info
+[8.237s] writing autocert_certification.egg-info/PKG-INFO
+[8.239s] writing dependency_links to autocert_certification.egg-info/dependency_links.txt
+[8.240s] writing entry points to autocert_certification.egg-info/entry_points.txt
+[8.241s] writing requirements to autocert_certification.egg-info/requires.txt
+[8.241s] writing top-level names to autocert_certification.egg-info/top_level.txt
+[8.245s] writing manifest file 'autocert_certification.egg-info/SOURCES.txt'
+[8.479s] reading manifest file 'autocert_certification.egg-info/SOURCES.txt'
+[8.482s] writing manifest file 'autocert_certification.egg-info/SOURCES.txt'
+[8.615s] running build_ext
+[8.616s] Creating /home/ubuntu/autocert_ws/install/autocert_certification/lib/python3.12/site-packages/autocert-certification.egg-link (link to .)
+[8.618s] Installing certification_node script to /home/ubuntu/autocert_ws/install/autocert_certification/lib/autocert_certification
+[8.621s] 
+[8.622s] Installed /home/ubuntu/autocert_ws/build/autocert_certification
+[8.623s] running symlink_data
+[8.623s] creating /home/ubuntu/autocert_ws/install/autocert_certification/share/ament_index
+[8.631s] creating /home/ubuntu/autocert_ws/install/autocert_certification/share/ament_index/resource_index
+[8.631s] creating /home/ubuntu/autocert_ws/install/autocert_certification/share/ament_index/resource_index/packages
+[8.631s] symbolically linking /home/ubuntu/autocert_ws/build/autocert_certification/resource/autocert_certification -> /home/ubuntu/autocert_ws/install/autocert_certification/share/ament_index/resource_index/packages
+[8.632s] symbolically linking /home/ubuntu/autocert_ws/build/autocert_certification/package.xml -> /home/ubuntu/autocert_ws/install/autocert_certification/share/autocert_certification
+[8.633s] creating /home/ubuntu/autocert_ws/install/autocert_certification/share/autocert_certification/config
+[8.635s] symbolically linking /home/ubuntu/autocert_ws/build/autocert_certification/config/limits.yaml -> /home/ubuntu/autocert_ws/install/autocert_certification/share/autocert_certification/config
+[8.638s] symbolically linking /home/ubuntu/autocert_ws/build/autocert_certification/config/robot_metadata.yaml -> /home/ubuntu/autocert_ws/install/autocert_certification/share/autocert_certification/config
+[8.776s] Invoked command in '/home/ubuntu/autocert_ws/build/autocert_certification' returned '0': PYTHONPATH=/home/ubuntu/autocert_ws/build/autocert_certification/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ubuntu/autocert_ws/install/autocert_certification/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ubuntu/autocert_ws/build/autocert_certification/build --no-deps symlink_data

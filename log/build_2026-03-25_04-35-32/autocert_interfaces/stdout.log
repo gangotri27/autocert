@@ -1,0 +1,209 @@
+[  1%] Built target autocert_interfaces__rosidl_generator_type_description
+[  1%] Built target ament_cmake_python_symlink_autocert_interfaces
+[  2%] Built target autocert_interfaces__cpp
+[ 26%] Built target autocert_interfaces__rosidl_generator_c
+[ 35%] Built target autocert_interfaces__rosidl_typesupport_introspection_c
+[ 45%] Built target autocert_interfaces__rosidl_typesupport_introspection_cpp
+[ 54%] Built target autocert_interfaces__rosidl_typesupport_c
+[ 70%] Built target autocert_interfaces__rosidl_typesupport_fastrtps_c
+[ 73%] Built target autocert_interfaces__rosidl_typesupport_fastrtps_cpp
+[ 83%] Built target autocert_interfaces__rosidl_typesupport_cpp
+[ 83%] Built target autocert_interfaces
+[ 84%] Built target autocert_interfaces__py
+[ 92%] Built target autocert_interfaces__rosidl_generator_py
+[ 95%] Built target autocert_interfaces_s__rosidl_typesupport_fastrtps_c
+[ 97%] Built target autocert_interfaces_s__rosidl_typesupport_introspection_c
+[100%] Built target autocert_interfaces_s__rosidl_typesupport_c
+running egg_info
+writing autocert_interfaces.egg-info/PKG-INFO
+writing dependency_links to autocert_interfaces.egg-info/dependency_links.txt
+writing top-level names to autocert_interfaces.egg-info/top_level.txt
+reading manifest file 'autocert_interfaces.egg-info/SOURCES.txt'
+writing manifest file 'autocert_interfaces.egg-info/SOURCES.txt'
+[100%] Built target ament_cmake_python_build_autocert_interfaces_egg
+-- Install configuration: ""
+-- Execute custom install script
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/ament_index/resource_index/rosidl_interfaces/autocert_interfaces
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/msg/PoseMeasurement.json
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/BatchFK.json
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/GetJointLimits.json
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/GetRobotInfo.json
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/CheckCollision.json
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/SampleWorkspace.json
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/detail/pose_measurement__functions.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/detail/pose_measurement__struct.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/detail/pose_measurement__type_support.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/pose_measurement.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/rosidl_generator_c__visibility_control.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/batch_fk.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/check_collision.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/batch_fk__functions.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/batch_fk__struct.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/batch_fk__type_support.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/check_collision__functions.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/check_collision__struct.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/check_collision__type_support.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_joint_limits__functions.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_joint_limits__struct.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_joint_limits__type_support.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_robot_info__functions.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_robot_info__struct.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_robot_info__type_support.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/sample_workspace__functions.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/sample_workspace__struct.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/sample_workspace__type_support.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/get_joint_limits.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/get_robot_info.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/sample_workspace.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/environment/library_path.sh
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/environment/library_path.dsv
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/detail/pose_measurement__rosidl_typesupport_fastrtps_c.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/batch_fk__rosidl_typesupport_fastrtps_c.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/check_collision__rosidl_typesupport_fastrtps_c.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_joint_limits__rosidl_typesupport_fastrtps_c.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_robot_info__rosidl_typesupport_fastrtps_c.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/sample_workspace__rosidl_typesupport_fastrtps_c.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/detail/pose_measurement__rosidl_typesupport_introspection_c.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/rosidl_typesupport_introspection_c__visibility_control.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/batch_fk__rosidl_typesupport_introspection_c.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/check_collision__rosidl_typesupport_introspection_c.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_joint_limits__rosidl_typesupport_introspection_c.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_robot_info__rosidl_typesupport_introspection_c.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/sample_workspace__rosidl_typesupport_introspection_c.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/detail/pose_measurement__builder.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/detail/pose_measurement__struct.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/detail/pose_measurement__traits.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/detail/pose_measurement__type_support.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/pose_measurement.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/rosidl_generator_cpp__visibility_control.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/batch_fk.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/check_collision.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/batch_fk__builder.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/batch_fk__struct.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/batch_fk__traits.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/batch_fk__type_support.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/check_collision__builder.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/check_collision__struct.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/check_collision__traits.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/check_collision__type_support.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_joint_limits__builder.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_joint_limits__struct.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_joint_limits__traits.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_joint_limits__type_support.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_robot_info__builder.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_robot_info__struct.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_robot_info__traits.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_robot_info__type_support.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/sample_workspace__builder.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/sample_workspace__struct.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/sample_workspace__traits.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/sample_workspace__type_support.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/get_joint_limits.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/get_robot_info.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/sample_workspace.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/detail/pose_measurement__rosidl_typesupport_fastrtps_cpp.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/batch_fk__rosidl_typesupport_fastrtps_cpp.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/check_collision__rosidl_typesupport_fastrtps_cpp.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_joint_limits__rosidl_typesupport_fastrtps_cpp.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_robot_info__rosidl_typesupport_fastrtps_cpp.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/sample_workspace__rosidl_typesupport_fastrtps_cpp.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/msg/detail/pose_measurement__rosidl_typesupport_introspection_cpp.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/batch_fk__rosidl_typesupport_introspection_cpp.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/check_collision__rosidl_typesupport_introspection_cpp.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_joint_limits__rosidl_typesupport_introspection_cpp.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/get_robot_info__rosidl_typesupport_introspection_cpp.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/include/autocert_interfaces/autocert_interfaces/srv/detail/sample_workspace__rosidl_typesupport_introspection_cpp.hpp
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/environment/pythonpath.sh
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/environment/pythonpath.dsv
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces-0.0.0-py3.12.egg-info/PKG-INFO
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces-0.0.0-py3.12.egg-info/SOURCES.txt
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces-0.0.0-py3.12.egg-info/dependency_links.txt
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces-0.0.0-py3.12.egg-info/top_level.txt
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/__init__.py
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/_autocert_interfaces_s.ep.rosidl_typesupport_c.c
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/_autocert_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/_autocert_interfaces_s.ep.rosidl_typesupport_introspection_c.c
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/autocert_interfaces_s__rosidl_typesupport_c.so
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/autocert_interfaces_s__rosidl_typesupport_fastrtps_c.so
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/autocert_interfaces_s__rosidl_typesupport_introspection_c.so
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/msg/__init__.py
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/msg/_pose_measurement.py
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/msg/_pose_measurement_s.c
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/srv/__init__.py
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/srv/_batch_fk.py
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/srv/_batch_fk_s.c
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/srv/_check_collision.py
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/srv/_check_collision_s.c
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/srv/_get_joint_limits.py
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/srv/_get_joint_limits_s.c
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/srv/_get_robot_info.py
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/srv/_get_robot_info_s.c
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/srv/_sample_workspace.py
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/srv/_sample_workspace_s.c
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/autocert_interfaces_s__rosidl_typesupport_fastrtps_c.so
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/autocert_interfaces_s__rosidl_typesupport_introspection_c.so
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/autocert_interfaces_s__rosidl_typesupport_c.so
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/msg/PoseMeasurement.idl
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/BatchFK.idl
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/GetJointLimits.idl
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/GetRobotInfo.idl
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/CheckCollision.idl
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/SampleWorkspace.idl
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/msg/PoseMeasurement.msg
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/BatchFK.srv
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/GetJointLimits.srv
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/GetRobotInfo.srv
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/CheckCollision.srv
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/srv/SampleWorkspace.srv
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/ament_index/resource_index/package_run_dependencies/autocert_interfaces
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/ament_index/resource_index/parent_prefix_path/autocert_interfaces
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/environment/ament_prefix_path.sh
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/environment/ament_prefix_path.dsv
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/environment/path.sh
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/environment/path.dsv
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/local_setup.bash
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/local_setup.sh
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/local_setup.zsh
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/local_setup.dsv
+-- Symlinking: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/package.dsv
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/ament_index/resource_index/packages/autocert_interfaces
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/rosidl_cmake-extras.cmake
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/ament_cmake_export_libraries-extras.cmake
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/ament_cmake_export_targets-extras.cmake
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/autocert_interfacesConfig.cmake
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/autocert_interfacesConfig-version.cmake
+-- Up-to-date symlink: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/package.xml
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/libautocert_interfaces__rosidl_generator_c.so
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/libautocert_interfaces__rosidl_typesupport_fastrtps_c.so
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/libautocert_interfaces__rosidl_typesupport_introspection_c.so
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/libautocert_interfaces__rosidl_typesupport_c.so
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/libautocert_interfaces__rosidl_typesupport_fastrtps_cpp.so
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/libautocert_interfaces__rosidl_typesupport_introspection_cpp.so
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/libautocert_interfaces__rosidl_typesupport_cpp.so
+Listing '/home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces'...
+Listing '/home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/msg'...
+Listing '/home/ubuntu/autocert_ws/install/autocert_interfaces/lib/python3.12/site-packages/autocert_interfaces/srv'...
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/lib/libautocert_interfaces__rosidl_generator_py.so
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/export_autocert_interfaces__rosidl_generator_cExport.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/export_autocert_interfaces__rosidl_generator_cExport-noconfig.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/export_autocert_interfaces__rosidl_typesupport_fastrtps_cExport.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/export_autocert_interfaces__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/autocert_interfaces__rosidl_typesupport_introspection_cExport.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/autocert_interfaces__rosidl_typesupport_introspection_cExport-noconfig.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/autocert_interfaces__rosidl_typesupport_cExport.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/autocert_interfaces__rosidl_typesupport_cExport-noconfig.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/export_autocert_interfaces__rosidl_generator_cppExport.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/export_autocert_interfaces__rosidl_typesupport_fastrtps_cppExport.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/export_autocert_interfaces__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/autocert_interfaces__rosidl_typesupport_introspection_cppExport.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/autocert_interfaces__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/autocert_interfaces__rosidl_typesupport_cppExport.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/autocert_interfaces__rosidl_typesupport_cppExport-noconfig.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/export_autocert_interfaces__rosidl_generator_pyExport.cmake
+-- Up-to-date: /home/ubuntu/autocert_ws/install/autocert_interfaces/share/autocert_interfaces/cmake/export_autocert_interfaces__rosidl_generator_pyExport-noconfig.cmake
