@@ -1,28 +1,47 @@
-# ISO 9283 Experiment Configuration — Robot Agnostic
-# All robot-specific values are injected via launch arguments
+# AutoCert Experiment Configuration — ISO 9283
+#
+# IMPORTANT: This file controls ONLY experiment-specific settings.
+#
+# Robot-specific settings (planning_group, end_effector_link, reference_frame,
+# planner_id, planning_time, velocity_scaling, acceleration_scaling) are
+# intentionally NOT here. They are passed exclusively via launch arguments:
+#
+#   ros2 launch autocert_bringup full_pipeline.launch.py \
+#     planning_group:=arm \
+#     end_effector_link:=wrist_roll_link \
+#     reference_frame:=link1 \
+#     ...
+#
+# Keeping robot identity out of this file is what makes the system robot-agnostic.
 
-# ── Pose strategy ─────────────────────────────────────────────────────────
-strategy: iso_cube
+# ── Pose generation strategy ──────────────────────────────────────────────────
+strategy: iso_cube                     # iso_cube | workspace_sampler
 
-# ISO Cube parameters
-cube_size_mm: 50
-cube_center: [0.35, 0.0, 0.35]          # adjust per robot
-pose_set: standard                        # standard(5), extended(7), full(27)
-fixed_orientation: [0.0, 0.0, 0.0, 1.0]  # quaternion [x,y,z,w]
+# ISO cube geometry
+cube_size_mm: 50                       # cube half-edge in millimetres
+cube_center: [0.20, 0.0, 0.22]        # [x, y, z] in metres in reference_frame
+pose_set: standard                     # standard(5) | extended(7) | full(27)
+fixed_orientation: [0.0, 0.0, 0.0, 1.0]  # quaternion [x, y, z, w]
 
-# ── Robot parameters (OVERRIDE via launch) ────────────────────────────────
-# These MUST be set correctly for your robot
-planning_group: arm
-end_effector_link: tool0
-reference_frame: base_link
+# Workspace sampler parameters (used when strategy: workspace_sampler)
+num_samples: 1000
+sampling_strategy: latin               # random | latin | halton | grid
 
-# ── MoveIt planner settings ───────────────────────────────────────────────
-planner_id: RRTConnect
-planning_time: 5.0
-velocity_scaling: 0.3
-acceleration_scaling: 0.3
+# ── Experiment timing ─────────────────────────────────────────────────────────
+repetitions_per_pose: 5                # ISO 9283 requires >= 30 for certification
+settling_time_s: 2.0                   # wait after motion before measuring
+measurement_timeout_s: 30.0            # max wait for action result
 
-# ── Experiment parameters ─────────────────────────────────────────────────
-repetitions_per_pose: 5                   # ISO 9283 requires 30 for certification
-settling_time_s: 2.0
-measurement_timeout_s: 30.0
+# ── Workspace safety bounds (metres) ─────────────────────────────────────────
+# Poses outside these bounds are filtered BEFORE being sent to MoveIt.
+# Set these to match your robot's actual reachable workspace.
+# For open_manipulator_x: reach ~0.38 m from link1
+workspace_bounds:
+  x: [0.05, 0.40]
+  y: [-0.25, 0.25]
+  z: [0.05, 0.45]
+
+# ── Motion execution options ──────────────────────────────────────────────────
+random_backoff: false                  # legacy option, not used in MoveIt mode
+backoff_range_m: 0.05
+backoff_attempts: 3

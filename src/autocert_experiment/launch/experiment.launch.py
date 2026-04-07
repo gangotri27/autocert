@@ -33,15 +33,24 @@ def generate_launch_description():
             choices=['simulation', 'real'],
             description='Robot mode: simulation or real'
         ),
+
+        DeclareLaunchArgument(
+            'run_id',
+            default_value='run_001',
+            description='Run identifier for experiment output'
+        ),
         
         Node(
             package='autocert_experiment',
             executable='experiment_node',
             name='experiment_node',
             output='screen',
+            arguments=[
+                '--config', LaunchConfiguration('config_file'),
+                '--output', LaunchConfiguration('output_file'),
+                '--run-id', LaunchConfiguration('run_id'),
+            ],
             parameters=[{
-                'config_file': LaunchConfiguration('config_file'),
-                'output_file': LaunchConfiguration('output_file'),
                 'robot_mode': LaunchConfiguration('robot_mode')
             }]
         ),

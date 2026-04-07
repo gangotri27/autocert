@@ -123,10 +123,12 @@ def generate_launch_description():
                 executable='experiment_node',
                 name='experiment_node',
                 output='screen',
+                arguments=[
+                    '--config', LaunchConfiguration('config_file'),
+                    '--output', LaunchConfiguration('output_file'),
+                    '--run-id', LaunchConfiguration('run_id'),
+                ],
                 parameters=[{
-                    'config_file': LaunchConfiguration('config_file'),
-                    'output_file': LaunchConfiguration('output_file'),
-                    'run_id': LaunchConfiguration('run_id'),
                     'robot_mode': LaunchConfiguration('robot_mode'),
                     'planning_group': LaunchConfiguration('planning_group'),
                     'end_effector_link': LaunchConfiguration('end_effector_link'),

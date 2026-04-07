@@ -1,31 +1,41 @@
-# Execution node parameters — robot-agnostic
-# Override these per robot via launch arguments or parameter files
+# AutoCert Execution Node Parameters
+#
+# FIXED: ROS2 parameter YAML MUST use the /**:  ros__parameters: structure.
+# Without this wrapper, rcl fails with:
+#   "Cannot have a value before ros__parameters"
+#
+# /**  means "apply to all nodes loading this file"
+# The launch file also passes individual parameter overrides that take
+# precedence over these defaults.
 
-# MoveIt planning group — must match SRDF
-planning_group: arm
+/**:
+  ros__parameters:
 
-# End-effector link — must match URDF
-end_effector_link: tool0
+    # MoveIt2 planning group — must match SRDF exactly
+    planning_group: arm
 
-# Reference frame for pose goals
-reference_frame: base_link
+    # End-effector link — must match URDF link name exactly
+    end_effector_link: tool0
 
-# Planner settings
-planner_id: RRTConnect
-planning_time: 5.0
-planning_attempts: 3
+    # Reference/base frame for all pose goals
+    reference_frame: base_link
 
-# Trajectory scaling
-velocity_scaling: 0.3
-acceleration_scaling: 0.3
+    # Planner selection
+    planner_id: RRTConnect
+    planning_time: 5.0
+    planning_attempts: 3
 
-# Goal tolerances
-goal_position_tolerance: 0.001      # 1 mm
-goal_orientation_tolerance: 0.01    # ~0.57°
-goal_joint_tolerance: 0.001         # ~0.057°
+    # Trajectory speed scaling (0.0 – 1.0)
+    velocity_scaling: 0.3
+    acceleration_scaling: 0.3
 
-# Workspace safety bounds (meters)
-workspace_bounds:
-  x: [-1.5, 1.5]
-  y: [-1.5, 1.5]
-  z: [-0.5, 2.5]
+    # Goal tolerances
+    goal_position_tolerance: 0.001      # metres  (~1 mm)
+    goal_orientation_tolerance: 0.01    # radians (~0.57°)
+    goal_joint_tolerance: 0.001         # radians (~0.057°)
+
+    # Orientation constraint enforcement (FIX-2)
+    apply_orientation_constraints: true
+    orientation_tolerance_x: 0.01      # radians
+    orientation_tolerance_y: 0.01      # radians
+    orientation_tolerance_z: 0.01      # radians
