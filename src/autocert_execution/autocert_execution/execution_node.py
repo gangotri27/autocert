@@ -127,36 +127,6 @@ class ExecutionNode(Node):
             f'  Planner        : {self._planner_id}'
         )
 
-    # ── MoveItPy Initialization ────────────────────────────────────────────
-
-    def _init_moveit(self):
-        """Initialize MoveItPy with current node parameters."""
-        if not MOVEIT_PY_AVAILABLE:
-            self.get_logger().error(
-                'moveit_py not available! Install moveit_py for ROS2 Jazzy.'
-            )
-            return
-
-        try:
-            # MoveItPy reads robot_description and planning config
-            # from the ROS2 parameter server automatically
-            self._moveit = MoveItPy(node_name='moveit_py_execution')
-            self._arm = self._moveit.get_planning_component(self._planning_group)
-
-            # Apply tolerances
-            self._arm.set_goal_state_tolerance(
-                self.get_parameter('goal_position_tolerance').value,
-                self.get_parameter('goal_orientation_tolerance').value,
-                self.get_parameter('goal_joint_tolerance').value
-            )
-
-            self._is_ready = True
-            self.get_logger().info('MoveItPy initialized successfully')
-
-        except Exception as e:
-            self.get_logger().error(f'MoveItPy initialization failed: {e}')
-            self._is_ready = False
-
     # ── Callbacks ──────────────────────────────────────────────────────────
 
     def _joint_state_cb(self, msg: JointState):
@@ -332,6 +302,105 @@ class ExecutionNode(Node):
         status_msg.data = 'MOTION_SUCCEEDED' if success else 'MOTION_FAILED'
         self._status_pub.publish(status_msg)
 
+    # ── Add these two methods to the ExecutionNode class ──────────────────────
+
+    def _check_robot_description(self) -> bool:
+        """Verify robot_description parameter was received and is non-empty."""
+        if not self.has_parameter('robot_description'):
+            self.get_logger().error(
+                'robot_description parameter is MISSING. '
+                'Check that execution.launch.py passed it as a Node parameter.'
+            )
+            return False
+        desc = self.get_parameter('robot_description').value
+        if not desc:
+            self.get_logger().error('robot_description parameter is EMPTY.')
+            return False
+        self.get_logger().info(
+            f'robot_description loaded: {len(desc)} chars'
+        )
+        return True
+
+
+    def _check_srdf(self) -> bool:
+        """Verify robot_description_semantic parameter was received and is non-empty."""
+        if not self.has_parameter('robot_description_semantic'):
+            self.get_logger().error(
+                'robot_description_semantic parameter is MISSING. '
+                'Check that execution.launch.py passed it as a Node parameter.'
+            )
+            return False
+        srdf = self.get_parameter('robot_description_semantic').value
+        if not srdf:
+            self.get_logger().error('robot_description_semantic parameter is EMPTY.')
+            return False
+        self.get_logger().info(
+            f'robot_description_semantic loaded: {len(srdf)} chars'
+        )
+        return True
+
+
+    # ── Replace the existing _init_moveit method ──────────────────────────────
+
+    def _init_moveit(self):
+        """
+        Initialize MoveItPy in a background thread with retries.
+        This prevents blocking __init__ and handles move_group startup delay.
+        """
+        import threading
+        thread = threading.Thread(target=self._init_moveit_with_retry, daemon=True)
+        thread.start()
+
+
+    def _init_moveit_with_retry(self):
+        """Background thread: retry MoveItPy initialization until move_group is ready."""
+        if not MOVEIT_PY_AVAILABLE:
+            self.get_logger().error(
+                'moveit_py not available. Install moveit_py for ROS2 Jazzy.'
+            )
+            return
+
+        if not self._check_robot_description():
+            self.get_logger().error(
+                'Cannot initialize MoveItPy: robot_description missing or empty.'
+            )
+            return
+
+        if not self._check_srdf():
+            self.get_logger().error(
+                'Cannot initialize MoveItPy: robot_description_semantic missing or empty.'
+            )
+            return
+
+        max_attempts = 10
+        retry_delay_sec = 3.0
+
+        for attempt in range(1, max_attempts + 1):
+            try:
+                self.get_logger().info(
+                    f'MoveItPy init attempt {attempt}/{max_attempts}...'
+                )
+                self._moveit = MoveItPy(node_name=self.get_name())
+                self._arm = self._moveit.get_planning_component(self._planning_group)
+                self._is_ready = True
+                self.get_logger().info('MoveItPy initialized successfully')
+                return
+
+            except Exception as e:
+                self.get_logger().warn(
+                    f'MoveItPy init attempt {attempt} failed: {e}'
+                )
+                if attempt < max_attempts:
+                    self.get_logger().info(
+                        f'Retrying in {retry_delay_sec}s...'
+                    )
+                    time.sleep(retry_delay_sec)
+
+        self.get_logger().error(
+            f'MoveItPy failed to initialize after {max_attempts} attempts. '
+            'Is move_group running and healthy?'
+        )
+        self._is_ready = False
 
 def main(args=None):
     rclpy.init(args=args)

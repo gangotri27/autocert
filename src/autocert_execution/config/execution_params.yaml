@@ -1,12 +1,12 @@
 # AutoCert Execution Node Parameters
 #
-# FIXED: ROS2 parameter YAML MUST use the /**:  ros__parameters: structure.
-# Without this wrapper, rcl fails with:
-#   "Cannot have a value before ros__parameters"
+# Contains ONLY execution-specific parameters.
 #
-# /**  means "apply to all nodes loading this file"
-# The launch file also passes individual parameter overrides that take
-# precedence over these defaults.
+# IMPORTANT — what is NOT here (and why):
+#   planning_pipelines / pipeline_names → defined ONLY in moveit.launch.py.
+#   robot_description / robot_description_semantic → injected by execution.launch.py
+#     directly into the Node as parameters at launch time.
+#   Keeping those here would create duplicate, potentially conflicting definitions.
 
 /**:
   ros__parameters:
@@ -34,7 +34,7 @@
     goal_orientation_tolerance: 0.01    # radians (~0.57°)
     goal_joint_tolerance: 0.001         # radians (~0.057°)
 
-    # Orientation constraint enforcement (FIX-2)
+    # Orientation constraint enforcement
     apply_orientation_constraints: true
     orientation_tolerance_x: 0.01      # radians
     orientation_tolerance_y: 0.01      # radians
