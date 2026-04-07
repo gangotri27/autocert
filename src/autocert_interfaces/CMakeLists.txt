@@ -21,12 +21,17 @@ set(srv_files
   "srv/GetRobotInfo.srv"
   "srv/CheckCollision.srv"
   "srv/SampleWorkspace.srv"
+  "srv/GetExecutionStatus.srv" 
 )
 
+set(action_files
+  "action/MoveToPose.action"
+)
 rosidl_generate_interfaces(${PROJECT_NAME}
   ${msg_files}
   ${srv_files}
-  DEPENDENCIES geometry_msgs builtin_interfaces
+  ${action_files}
+  DEPENDENCIES geometry_msgs builtin_interfaces action_msgs
 )
 
 ament_export_dependencies(rosidl_default_runtime)

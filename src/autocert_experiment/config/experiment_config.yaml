@@ -1,25 +1,28 @@
-# Experiment configuration for ISO 9283 testing
+# ISO 9283 Experiment Configuration — Robot Agnostic
+# All robot-specific values are injected via launch arguments
 
-# Pose generation strategy
-# Options: iso_cube, workspace_sampler, trajectory_test, calibration_grid
+# ── Pose strategy ─────────────────────────────────────────────────────────
 strategy: iso_cube
 
-# ISO cube parameters (used if strategy = iso_cube)
+# ISO Cube parameters
 cube_size_mm: 50
-cube_center: [0.20, 0.0, 0.22] # x, y, z in mm
-pose_set: standard  # standard (5), extended (7), full (27)
-fixed_orientation: [0.0, 0.0, 0.0, 1.0]  # quaternion
+cube_center: [0.35, 0.0, 0.35]          # adjust per robot
+pose_set: standard                        # standard(5), extended(7), full(27)
+fixed_orientation: [0.0, 0.0, 0.0, 1.0]  # quaternion [x,y,z,w]
 
-# Workspace sampling parameters (used if strategy = workspace_sampler)
-num_samples: 1000
-sampling_strategy: latin  # random, latin, halton, grid
+# ── Robot parameters (OVERRIDE via launch) ────────────────────────────────
+# These MUST be set correctly for your robot
+planning_group: arm
+end_effector_link: tool0
+reference_frame: base_link
 
-# Experiment parameters
-repetitions_per_pose: 5  # ISO 9283 requires 30
+# ── MoveIt planner settings ───────────────────────────────────────────────
+planner_id: RRTConnect
+planning_time: 5.0
+velocity_scaling: 0.3
+acceleration_scaling: 0.3
+
+# ── Experiment parameters ─────────────────────────────────────────────────
+repetitions_per_pose: 5                   # ISO 9283 requires 30 for certification
 settling_time_s: 2.0
-measurement_timeout_s: 5.0
-
-# ... existing fields ...
-random_backoff: true               # enable/disable random backoff
-backoff_range_m: 0.05              # meters
-backoff_attempts: 5                # retries if backoff fails
+measurement_timeout_s: 30.0
