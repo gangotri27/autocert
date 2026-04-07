@@ -64,6 +64,14 @@ class ExecutionNode(Node):
         self.declare_parameter('goal_joint_tolerance', 0.001)
         self.declare_parameter('robot_description_param', 'robot_description')
 
+        # FIX: declare robot_description and robot_description_semantic so that
+        # ROS 2 strict-mode parameter resolution makes them accessible via
+        # get_parameter().  Without these declarations, parameters injected by
+        # execution.launch.py through a --params-file are silently invisible
+        # and has_parameter() returns False, causing MoveItPy init to abort.
+        self.declare_parameter('robot_description', '')
+        self.declare_parameter('robot_description_semantic', '')
+
         # Read parameters
         self._planning_group = self.get_parameter('planning_group').value
         self._ee_link = self.get_parameter('end_effector_link').value
@@ -302,8 +310,6 @@ class ExecutionNode(Node):
         status_msg.data = 'MOTION_SUCCEEDED' if success else 'MOTION_FAILED'
         self._status_pub.publish(status_msg)
 
-    # ── Add these two methods to the ExecutionNode class ──────────────────────
-
     def _check_robot_description(self) -> bool:
         """Verify robot_description parameter was received and is non-empty."""
         if not self.has_parameter('robot_description'):
@@ -320,7 +326,6 @@ class ExecutionNode(Node):
             f'robot_description loaded: {len(desc)} chars'
         )
         return True
-
 
     def _check_srdf(self) -> bool:
         """Verify robot_description_semantic parameter was received and is non-empty."""
@@ -339,9 +344,6 @@ class ExecutionNode(Node):
         )
         return True
 
-
-    # ── Replace the existing _init_moveit method ──────────────────────────────
-
     def _init_moveit(self):
         """
         Initialize MoveItPy in a background thread with retries.
@@ -350,7 +352,6 @@ class ExecutionNode(Node):
         import threading
         thread = threading.Thread(target=self._init_moveit_with_retry, daemon=True)
         thread.start()
-
 
     def _init_moveit_with_retry(self):
         """Background thread: retry MoveItPy initialization until move_group is ready."""
@@ -401,6 +402,7 @@ class ExecutionNode(Node):
             'Is move_group running and healthy?'
         )
         self._is_ready = False
+
 
 def main(args=None):
     rclpy.init(args=args)

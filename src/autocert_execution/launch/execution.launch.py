@@ -20,6 +20,11 @@ Key design rules:
   3. We write a second small temp YAML that scopes robot_description under
      the node name "execution_node" — this guarantees it is never swallowed
      by the "/**:" wildcard in execution_params.yaml.
+  4. Planning pipeline config and kinematics config are passed as Python dicts
+     (which become /**:-scoped temp files). This makes them visible to ALL
+     nodes in the execution_node process, including the MoveItPy internal node
+     (moveit_XXXXXXXX). Without this, MoveItPy fails with
+     "Failed to load planning pipelines from parameter server".
 """
 
 import os
@@ -75,7 +80,6 @@ def write_robot_description_yaml(
             robot_description: "<xml ...>"
             robot_description_semantic: "<robot ...>"
     """
-    # yaml.dump handles escaping of quotes, newlines, etc. inside the XML
     data = {
         node_name: {
             'ros__parameters': {
@@ -118,14 +122,55 @@ def launch_setup(context, *args, **kwargs):
         print(f'[WARNING] SRDF empty or not found: {srdf_file}')
 
     # ── Write robot model to a node-scoped YAML ────────────────────────────
-    # This prevents the "/**:" wildcard in execution_params.yaml from shadowing
-    # the robot_description parameter.  Node-scoped params always win over
-    # wildcard-scoped params in ROS 2 Jazzy parameter resolution.
     robot_desc_yaml = write_robot_description_yaml(
         node_name='execution_node',
         robot_description=robot_description,
         robot_description_semantic=robot_description_semantic,
     )
+
+    # ── Kinematics config ──────────────────────────────────────────────────
+    # Passed as a /**:-scoped dict so MoveItPy's internal node (moveit_XXXX)
+    # can also resolve the kinematics solver.
+    kinematics_config = {
+        'robot_description_kinematics': {
+            planning_group: {
+                'kinematics_solver':
+                    'kdl_kinematics_plugin/KDLKinematicsPlugin',
+                'kinematics_solver_search_resolution': 0.005,
+                'kinematics_solver_timeout': 0.005,
+            }
+        }
+    }
+
+    # ── Planning pipeline config ───────────────────────────────────────────
+    # MoveItPy creates its own internal C++ node (named moveit_XXXXXXXX).
+    # That node needs planning_pipelines.pipeline_names and ompl.planning_plugin.
+    # Passing these as a Python dict causes the ROS 2 launch system to write
+    # a /**:-scoped temp params file, which applies to ALL nodes in this
+    # process — including the MoveItPy internal node.
+    # Without this, every MoveItPy init attempt fails with:
+    #   "Failed to load planning pipelines from parameter server"
+    planning_pipeline_params = {
+        'planning_pipelines': {
+            'pipeline_names': ['ompl'],
+        },
+        'default_planning_pipeline': 'ompl',
+        'ompl': {
+            'planning_plugin': 'ompl_interface/OMPLPlanner',
+            'request_adapters': [
+                'default_planning_request_adapters/ResolveConstraintFrames',
+                'default_planning_request_adapters/ValidateWorkspaceBounds',
+                'default_planning_request_adapters/CheckStartStateBounds',
+                'default_planning_request_adapters/CheckStartStateCollision',
+            ],
+            'response_adapters': [
+                'default_planning_response_adapters/AddTimeOptimalParameterization',
+                'default_planning_response_adapters/ValidateSolution',
+                'default_planning_response_adapters/DisplayMotionPath',
+            ],
+            'start_state_max_bounds_error': 0.1,
+        },
+    }
 
     execution_node = Node(
         package='autocert_execution',
@@ -137,7 +182,11 @@ def launch_setup(context, *args, **kwargs):
             default_params,
             # 2. Node-scoped robot model (overrides wildcard — guaranteed)
             robot_desc_yaml,
-            # 3. Runtime overrides from launch arguments (highest priority)
+            # 3. Kinematics config (/**:  → visible to MoveItPy internal node)
+            kinematics_config,
+            # 4. Planning pipeline config (/**:  → visible to MoveItPy internal node)
+            planning_pipeline_params,
+            # 5. Runtime overrides from launch arguments (highest priority)
             {
                 'planning_group':       planning_group,
                 'end_effector_link':    ee_link,

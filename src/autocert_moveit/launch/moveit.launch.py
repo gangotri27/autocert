@@ -9,10 +9,13 @@ Responsibility:
 
 Fixed:
   - pipeline_names is written as a proper YAML sequence (string_array)
-    under move_group.ros__parameters.planning_pipelines.pipeline_names
-  - planning_plugin is under 'ompl' key, NOT 'move_group'
-  - request_adapters is a single folded-block string ('>') — NOT a tuple
-  - Top-level YAML key must NOT have a leading slash
+  - request_adapters is a YAML list (string_array), not a folded scalar
+  - ompl_pipeline YAML uses /**:  wildcard scope — MoveIt2 Jazzy 2.12.x
+    PlanningPipeline::configure() reads ompl.planning_plugin from the node's
+    parameter store; node-scoped YAML fails silently in this version because
+    the pipeline is constructed before all scoped params are resolved.
+    Wildcard scope guarantees the parameter is visible at construction time.
+  - Top-level YAML key has NO leading slash
 """
 
 import os
@@ -98,40 +101,33 @@ def launch_setup(context, *args, **kwargs):
 
     # ── OMPL Planning Pipeline ─────────────────────────────────────────────
     #
-    # MoveIt2 2.12 (Jazzy) / MoveItCpp::loadPlanningPipelines() reads:
+    # FIX: Use /**:  (wildcard) scope instead of "move_group:" scope.
     #
-    #   move_group:
-    #     ros__parameters:
-    #       planning_pipelines:
-    #         pipeline_names:          ← MUST be a YAML sequence (string_array)
-    #           - ompl
-    #
-    # The crash "expected [string_array] got [string]" means pipeline_names
-    # was serialised as a plain string.  We write raw YAML so that PyYAML
-    # dump quirks cannot corrupt the sequence type.
+    # In MoveIt2 2.12.4 (Jazzy), PlanningPipeline::configure() is called
+    # during MoveItCpp construction before all node-scoped parameters are
+    # fully resolved. Using /**:  scope stores the parameters process-wide
+    # so they are visible at the exact moment configure() reads them.
     #
     # Rules enforced:
-    #   1. Top-level key has NO leading slash  → "move_group:", not "/move_group:"
-    #   2. pipeline_names uses "- item" list syntax  → parsed as string_array
-    #   3. planning_plugin lives under the pipeline key ("ompl:"), NOT under
-    #      "move_group:" directly
-    #   4. request_adapters is a single folded string (">") so rcl sees one
-    #      string value, not an array
+    #   1. /**:  scope → parameters visible to ALL nodes in this process
+    #   2. pipeline_names → YAML list (string_array) ← fixed in previous round
+    #   3. request_adapters → YAML list (string_array) ← fixed in previous round
+    #   4. planning_plugin lives under the pipeline key ("ompl:"), not at root
     #
     ompl_yaml_str = (
-        "move_group:\n"
+        "/**:\n"                             # ← KEY FIX: wildcard, not "move_group:"
         "  ros__parameters:\n"
         "    planning_pipelines:\n"
-        "      pipeline_names:\n"          # ← string_array: this is the key fix
+        "      pipeline_names:\n"
         "        - ompl\n"
         "    default_planning_pipeline: ompl\n"
-        "    ompl:\n"                       # pipeline config under its own key
+        "    ompl:\n"
         "      planning_plugin: ompl_interface/OMPLPlanner\n"
-        "      request_adapters: >\n"       # folded block → single string value
-        "        default_planning_request_adapters/ResolveConstraintFrames\n"
-        "        default_planning_request_adapters/ValidateWorkspaceBounds\n"
-        "        default_planning_request_adapters/CheckStartStateBounds\n"
-        "        default_planning_request_adapters/CheckStartStateCollision\n"
+        "      request_adapters:\n"
+        "        - default_planning_request_adapters/ResolveConstraintFrames\n"
+        "        - default_planning_request_adapters/ValidateWorkspaceBounds\n"
+        "        - default_planning_request_adapters/CheckStartStateBounds\n"
+        "        - default_planning_request_adapters/CheckStartStateCollision\n"
         "      response_adapters:\n"
         "        - default_planning_response_adapters/AddTimeOptimalParameterization\n"
         "        - default_planning_response_adapters/ValidateSolution\n"
@@ -146,7 +142,7 @@ def launch_setup(context, *args, **kwargs):
         "          type: geometric::RRT\n"
         "          range: 0.0\n"
         "          goal_bias: 0.05\n"
-        f"    ompl.{planning_group}:\n"     # per-group config at move_group level
+        f"    ompl.{planning_group}:\n"
         "      planner_configs:\n"
         "        - RRTConnect\n"
     )
@@ -184,7 +180,7 @@ def launch_setup(context, *args, **kwargs):
             {'robot_description':          robot_description},
             {'robot_description_semantic': robot_description_semantic},
             {'robot_description_kinematics': kinematics_config},
-            # Planning pipeline — MUST come before general move_group params
+            # Planning pipeline (/**:  scoped — visible at pipeline construction)
             ompl_params_file,
             # Controller manager
             controllers_config,
