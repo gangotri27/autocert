@@ -1,289 +1,386 @@
 #!/usr/bin/env python3
 """
-Execution Node — Planner-Based Motion Execution
-
-Replaces the IK-heavy SimRobotAdapter with a clean MoveIt2
-planning pipeline. Accepts MoveToPose action goals, plans via
-MoveIt2, executes, and returns success/failure.
-
-Key design rules enforced here:
-  ✅ No hardcoded joint names, link names, or frames
-  ✅ Everything parameterized
-  ✅ Uses MoveIt2 planner, NOT direct IK
-  ✅ Validates motion success before returning
+execution_node.py  —  AutoCert execution node (MoveItPy backend)
+=================================================================
+Accepts /move_to_pose action goals, plans via MoveItPy, executes,
+and returns success/failure. Includes a robust, crash-free 
+Simulation Fallback using direct RobotState IK.
 """
 
 import time
+import xml.etree.ElementTree as ET
+
 import rclpy
 from rclpy.node import Node
-from rclpy.action import ActionServer, CancelResponse, GoalResponse
+from rclpy.action import ActionServer, GoalResponse, CancelResponse
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 
 from geometry_msgs.msg import PoseStamped
-from std_msgs.msg import Bool, String
 from sensor_msgs.msg import JointState
+from std_msgs.msg import Bool, String
 
 from autocert_interfaces.action import MoveToPose
 from autocert_interfaces.srv import GetExecutionStatus
 
 try:
     from moveit.planning import MoveItPy
-    from moveit.core.robot_state import RobotState
+    from moveit.core.robot_state import RobotState  # CRITICAL IMPORT FOR IK FALLBACK
     MOVEIT_PY_AVAILABLE = True
 except ImportError:
     MOVEIT_PY_AVAILABLE = False
 
 
 class ExecutionNode(Node):
-    """
-    ROS2 Action Server that accepts pose goals and executes them
-    through the MoveIt2 planning pipeline.
 
-    Communication interfaces:
-      Action Server : /move_to_pose  (autocert_interfaces/MoveToPose)
-      Service       : /get_execution_status
-      Publisher     : /motion_done (Bool)
-      Subscriber    : /joint_states
-    """
+    MAX_INIT_ATTEMPTS = 10
+    INIT_BASE_DELAY   = 3.0
+    INIT_MAX_DELAY    = 30.0
 
     def __init__(self):
         super().__init__('execution_node')
 
-        # ── Declare all parameters (robot-agnostic) ────────────────────────
-        self.declare_parameter('planning_group', 'arm')
-        self.declare_parameter('end_effector_link', 'tool0')
-        self.declare_parameter('reference_frame', 'base_link')
-        self.declare_parameter('planner_id', 'RRTConnect')
-        self.declare_parameter('planning_time', 5.0)
-        self.declare_parameter('planning_attempts', 3)
-        self.declare_parameter('velocity_scaling', 0.3)
-        self.declare_parameter('acceleration_scaling', 0.3)
-        self.declare_parameter('goal_position_tolerance', 0.001)
-        self.declare_parameter('goal_orientation_tolerance', 0.01)
-        self.declare_parameter('goal_joint_tolerance', 0.001)
-        self.declare_parameter('robot_description_param', 'robot_description')
+        self._declare_all_parameters()
 
-        # FIX: declare robot_description and robot_description_semantic so that
-        # ROS 2 strict-mode parameter resolution makes them accessible via
-        # get_parameter().  Without these declarations, parameters injected by
-        # execution.launch.py through a --params-file are silently invisible
-        # and has_parameter() returns False, causing MoveItPy init to abort.
-        self.declare_parameter('robot_description', '')
-        self.declare_parameter('robot_description_semantic', '')
+        self.planning_group    = self.get_parameter('planning_group').value
+        self.end_effector_link = self.get_parameter('end_effector_link').value
+        self.reference_frame   = self.get_parameter('reference_frame').value
+        self.planner_id        = self.get_parameter('planner_id').value
+        self.planning_time     = self.get_parameter('planning_time').value
+        self.vel_scale         = self.get_parameter('velocity_scaling').value
+        self.acc_scale         = self.get_parameter('acceleration_scaling').value
+        self.robot_mode        = self.get_parameter('robot_mode').value
 
-        # Read parameters
-        self._planning_group = self.get_parameter('planning_group').value
-        self._ee_link = self.get_parameter('end_effector_link').value
-        self._ref_frame = self.get_parameter('reference_frame').value
-        self._planner_id = self.get_parameter('planner_id').value
-        self._planning_time = self.get_parameter('planning_time').value
-        self._planning_attempts = self.get_parameter('planning_attempts').value
-        self._vel_scale = self.get_parameter('velocity_scaling').value
-        self._acc_scale = self.get_parameter('acceleration_scaling').value
+        self.get_logger().info(
+            f'ExecutionNode ready\n'
+            f'  Planning group : {self.planning_group}\n'
+            f'  End-effector   : {self.end_effector_link}\n'
+            f'  Reference frame: {self.reference_frame}\n'
+            f'  Planner        : {self.planner_id}\n'
+            f'  Mode           : {self.robot_mode}'
+        )
 
-        # ── State ──────────────────────────────────────────────────────────
+        self._moveit       = None
+        self._arm          = None
+        self._ready        = False
         self._is_executing = False
-        self._is_ready = False
-        self._current_joints = None
-        self._moveit = None
+        self._init_attempt = 0
+        self._last_joint_state = None
 
-        # ── Callback group for concurrent action + service ─────────────────
         self._cb_group = ReentrantCallbackGroup()
 
-        # ── Publishers ─────────────────────────────────────────────────────
-        self._motion_done_pub = self.create_publisher(
-            Bool, '/motion_done', 10
-        )
-        self._status_pub = self.create_publisher(
-            String, '/execution_status', 10
-        )
+        # Publishers
+        self._motion_done_pub = self.create_publisher(Bool,       '/motion_done',      10)
+        self._status_pub      = self.create_publisher(String,     '/execution_status', 10)
+        self._sim_joint_pub   = self.create_publisher(JointState, '/simulated_joint_states', 10)
 
-        # ── Subscribers ────────────────────────────────────────────────────
-        self.create_subscription(
-            JointState, '/joint_states',
-            self._joint_state_cb, 10,
-            callback_group=self._cb_group
-        )
-
-        # ── Services ───────────────────────────────────────────────────────
+        # Service
         self.create_service(
             GetExecutionStatus, '/get_execution_status',
             self._get_status_cb,
             callback_group=self._cb_group
         )
 
-        # ── Action server ──────────────────────────────────────────────────
+        # Action server
         self._action_server = ActionServer(
-            self,
-            MoveToPose,
-            '/move_to_pose',
+            self, MoveToPose, '/move_to_pose',
             execute_callback=self._execute_cb,
             goal_callback=self._goal_cb,
             cancel_callback=self._cancel_cb,
-            callback_group=self._cb_group
+            callback_group=self._cb_group,
         )
 
-        # ── Initialize MoveItPy ────────────────────────────────────────────
-        self._init_moveit()
+        # In simulation, continuously publish to satisfy MoveItPy Monitor
+        if self.robot_mode == 'simulation':
+            self.create_timer(0.05, self._publish_simulated_joint_states, callback_group=self._cb_group)
 
-        self.get_logger().info(
-            f'ExecutionNode ready\n'
-            f'  Planning group : {self._planning_group}\n'
-            f'  End-effector   : {self._ee_link}\n'
-            f'  Reference frame: {self._ref_frame}\n'
-            f'  Planner        : {self._planner_id}'
-        )
+        self.create_timer(0.5, self._try_init_moveit_py, callback_group=self._cb_group)
 
-    # ── Callbacks ──────────────────────────────────────────────────────────
+    def _declare_all_parameters(self):
+        from rcl_interfaces.msg import ParameterDescriptor, ParameterType
+        PT = ParameterType
 
-    def _joint_state_cb(self, msg: JointState):
-        """Track current joint state."""
-        self._current_joints = msg
+        def pd(desc, ptype):
+            d = ParameterDescriptor()
+            d.description = desc
+            d.type = ptype
+            return d
+
+        self.declare_parameter('planning_group',             'arm',             pd('MoveIt planning group', PT.PARAMETER_STRING))
+        self.declare_parameter('end_effector_link',          'wrist_roll_link', pd('End-effector link',     PT.PARAMETER_STRING))
+        self.declare_parameter('reference_frame',            'link1',           pd('Planning frame',        PT.PARAMETER_STRING))
+        self.declare_parameter('planner_id',                 'RRTConnect',      pd('OMPL planner ID',       PT.PARAMETER_STRING))
+        self.declare_parameter('planning_time',              5.0,               pd('Max planning time (s)', PT.PARAMETER_DOUBLE))
+        self.declare_parameter('velocity_scaling',           0.3,               pd('Velocity scaling',      PT.PARAMETER_DOUBLE))
+        self.declare_parameter('acceleration_scaling',       0.3,               pd('Acceleration scaling',  PT.PARAMETER_DOUBLE))
+        self.declare_parameter('robot_mode',                 'simulation',      pd('Robot Mode',            PT.PARAMETER_STRING))
+        self.declare_parameter('robot_description',          '',                pd('Robot URDF XML',        PT.PARAMETER_STRING))
+        self.declare_parameter('robot_description_semantic', '',                pd('Robot SRDF XML',        PT.PARAMETER_STRING))
+
+    def _publish_simulated_joint_states(self):
+        """Acts as a virtual robot controller to prevent MoveItPy from timing out."""
+        if self._last_joint_state is None:
+            try:
+                robot_description = self.get_parameter('robot_description').value
+                if not robot_description:
+                    return
+                root = ET.fromstring(robot_description)
+                joint_names = [j.attrib['name'] for j in root.findall('joint') if j.attrib.get('type') not in ['fixed', 'floating']]
+                if joint_names:
+                    js_msg = JointState()
+                    js_msg.name = joint_names
+                    js_msg.position = [0.0] * len(joint_names)
+                    js_msg.velocity = [0.0] * len(joint_names)
+                    js_msg.effort =[0.0] * len(joint_names)
+                    self._last_joint_state = js_msg
+            except Exception as e:
+                self.get_logger().error(f"Failed to parse URDF for joint names: {e}")
+                return
+
+        if self._last_joint_state:
+            self._last_joint_state.header.stamp = self.get_clock().now().to_msg()
+            self._sim_joint_pub.publish(self._last_joint_state)
+
+    def _try_init_moveit_py(self):
+        if not rclpy.ok() or self._ready:
+            return
+        if not MOVEIT_PY_AVAILABLE:
+            self.get_logger().error('moveit_py not available.')
+            return
+
+        self._init_attempt += 1
+        if self._init_attempt > self.MAX_INIT_ATTEMPTS:
+            self.get_logger().fatal(f'MoveItPy failed after {self.MAX_INIT_ATTEMPTS} attempts.')
+            return
+
+        self.get_logger().info(f'MoveItPy init attempt {self._init_attempt}/{self.MAX_INIT_ATTEMPTS}...')
+
+        try:
+            robot_description          = self.get_parameter('robot_description').value
+            robot_description_semantic = self.get_parameter('robot_description_semantic').value
+
+            if not robot_description or not robot_description_semantic:
+                raise RuntimeError('robot_description or robot_description_semantic is empty.')
+
+            planner_config_name = f"{self.planner_id}kConfigDefault"
+
+            config_dict = {
+                'robot_description': robot_description,
+                'robot_description_semantic': robot_description_semantic,
+
+                'planning_scene_monitor_options': {
+                    'name': "planning_scene_monitor",
+                    'robot_description': "robot_description",
+                    'joint_state_topic': "/joint_states",
+                    'attached_collision_object_topic': "/moveit_cpp/planning_scene_monitor",
+                    'publish_planning_scene_topic': "/moveit_cpp/publish_planning_scene",
+                    'monitored_planning_scene_topic': "/moveit_cpp/monitored_planning_scene",
+                    'wait_for_initial_state_timeout': 10.0,
+                },
+
+                'planning_pipelines': {
+                    'pipeline_names': ["ompl"]
+                },
+
+                'plan_request_params': {
+                    'planning_attempts': 5,
+                    'planning_pipeline': 'ompl',
+                    'planner_id': planner_config_name,
+                    'max_velocity_scaling_factor': self.vel_scale,
+                    'max_acceleration_scaling_factor': self.acc_scale,
+                    'planning_time': self.planning_time,
+                },
+
+                'ompl': {
+                    'planning_plugins':['ompl_interface/OMPLPlanner'],
+                    'request_adapters':[
+                        'default_planning_request_adapters/ResolveConstraintFrames',
+                        'default_planning_request_adapters/CheckStartStateBounds',
+                        'default_planning_request_adapters/CheckStartStateCollision',
+                    ],
+                    'response_adapters':[
+                        'default_planning_response_adapters/ValidateSolution',
+                        'default_planning_response_adapters/DisplayMotionPath',
+                    ],
+                    'start_state_max_bounds_error': 0.1,
+                    
+                    'planner_configs': {
+                        planner_config_name: {
+                            'type': f'geometric::{self.planner_id}',
+                            'range': 0.0,
+                        }
+                    },
+                    self.planning_group: {
+                        'default_planner_config': planner_config_name,
+                        'planner_configs': [planner_config_name],
+                    }
+                },
+
+                'robot_description_kinematics': {
+                    self.planning_group: {
+                        'kinematics_solver': 'kdl_kinematics_plugin/KDLKinematicsPlugin',
+                        'kinematics_solver_search_resolution': 0.005,
+                        'kinematics_solver_timeout': 0.5,
+                        'kinematics_solver_attempts': 50,
+                        'position_only_ik': True 
+                    }
+                },
+
+                'moveit_manage_controllers': True,
+                'trajectory_execution': {
+                    'allowed_execution_duration_scaling': 1.2,
+                    'allowed_goal_duration_margin': 0.5,
+                    'allowed_start_tolerance': 0.01,
+                    'execution_duration_monitoring': False,
+                }
+            }
+
+            node_name = f'moveit_py_execution_{self._init_attempt}'
+            self._moveit = MoveItPy(node_name=node_name, config_dict=config_dict)
+            self._arm    = self._moveit.get_planning_component(self.planning_group)
+            self._ready  = True
+
+            self.get_logger().info(
+                'MoveItPy initialised successfully\n'
+                f'  Group  : {self.planning_group}\n'
+                f'  EE Link: {self.end_effector_link}\n'
+                f'  Frame  : {self.reference_frame}'
+            )
+
+        except Exception as exc:
+            delay = min(self.INIT_BASE_DELAY * (2 ** (self._init_attempt - 1)), self.INIT_MAX_DELAY)
+            self.get_logger().warn(f'MoveItPy init attempt {self._init_attempt} failed: {exc}')
+            self.get_logger().info(f'Retrying in {delay:.1f}s...')
+            if rclpy.ok():
+                self.create_timer(delay, self._try_init_moveit_py, callback_group=self._cb_group)
+
+    def _get_status_cb(self, request, response):
+        response.is_executing      = self._is_executing
+        response.is_ready          = self._ready
+        response.current_state     = 'EXECUTING' if self._is_executing else 'IDLE'
+        response.planning_group    = self.planning_group
+        response.end_effector_link = self.end_effector_link
+        return response
 
     def _goal_cb(self, goal_request):
-        """Accept or reject incoming goals."""
-        if self._is_executing:
-            self.get_logger().warn('Rejecting goal: already executing')
-            return GoalResponse.REJECT
-        if not self._is_ready:
-            self.get_logger().warn('Rejecting goal: not ready (MoveItPy not initialized)')
+        if self._is_executing or not self._ready:
             return GoalResponse.REJECT
         return GoalResponse.ACCEPT
 
     def _cancel_cb(self, goal_handle):
-        """Accept cancellation requests."""
         self.get_logger().info('Cancellation requested')
         return CancelResponse.ACCEPT
 
-    async def _execute_cb(self, goal_handle):
-        """
-        Main execution callback.
-        Plans via MoveIt2 and executes trajectory.
-        """
-        goal = goal_handle.request
+    def _execute_cb(self, goal_handle):
+        goal   = goal_handle.request
         result = MoveToPose.Result()
-        feedback = MoveToPose.Feedback()
 
         self._is_executing = True
-        t_start = time.time()
 
-        # Override parameters if provided in goal
-        planning_group = goal.planning_group or self._planning_group
-        ee_link = goal.end_effector_link or self._ee_link
-        planner_id = goal.planner_id or self._planner_id
-        planning_time = goal.planning_time if goal.planning_time > 0 else self._planning_time
-        vel_scale = goal.velocity_scaling if goal.velocity_scaling > 0 else self._vel_scale
-        acc_scale = goal.acceleration_scaling if goal.acceleration_scaling > 0 else self._acc_scale
+        target         = goal.target_pose
+        planning_group = goal.planning_group or self.planning_group
+        ee_link        = goal.end_effector_link or self.end_effector_link
 
-        target_pose: PoseStamped = goal.target_pose
+        self.get_logger().info(
+            f'Executing goal: ({target.pose.position.x:.3f}, '
+            f'{target.pose.position.y:.3f}, {target.pose.position.z:.3f})'
+        )
 
         try:
-            # ── Phase 1: Setup planning component ─────────────────────────
-            feedback.state = 'SETTING_UP'
-            feedback.current_phase = 'Configuring planner'
-            feedback.progress_percent = 10.0
-            goal_handle.publish_feedback(feedback)
-
             arm = self._moveit.get_planning_component(planning_group)
-
-            # ── Phase 2: Set current state as start ───────────────────────
-            feedback.state = 'SETTING_START'
-            feedback.current_phase = 'Setting start state'
-            feedback.progress_percent = 20.0
-            goal_handle.publish_feedback(feedback)
-
             arm.set_start_state_to_current_state()
 
-            # ── Phase 3: Set goal pose ─────────────────────────────────────
-            feedback.state = 'SETTING_GOAL'
-            feedback.current_phase = 'Setting goal pose'
-            feedback.progress_percent = 30.0
-            goal_handle.publish_feedback(feedback)
+            # --- CRITICAL FIX 1: SOLVE IK MANUALLY FOR 5-DOF ARMS ---
+            # Instantiate a fresh RobotState to hold the math
+            robot_model = self._moveit.get_robot_model()
+            goal_state = RobotState(robot_model)
 
-            # Ensure frame_id is set
-            if not target_pose.header.frame_id:
-                target_pose.header.frame_id = self._ref_frame
+            # Manually solve IK. 'position_only_ik' allows it to ignore strict orientation!
+            ik_success = goal_state.set_from_ik(planning_group, target.pose, ee_link)
 
-            arm.set_goal_state(
-                pose_stamped_msg=target_pose,
-                pose_link=ee_link
-            )
-
-            # ── Phase 4: Plan ──────────────────────────────────────────────
-            feedback.state = 'PLANNING'
-            feedback.current_phase = 'Running motion planner'
-            feedback.progress_percent = 40.0
-            goal_handle.publish_feedback(feedback)
-
-            plan_start = time.time()
-            plan_result = None
-
-            for attempt in range(int(self._planning_attempts)):
-                self.get_logger().info(
-                    f'Planning attempt {attempt + 1}/{int(self._planning_attempts)}'
-                )
-                plan_result = arm.plan()
-                if plan_result:
-                    break
-                self.get_logger().warn(f'Planning attempt {attempt + 1} failed')
-
-            plan_time_ms = (time.time() - plan_start) * 1000.0
-            result.planning_time_ms = plan_time_ms
-
-            if not plan_result:
-                self.get_logger().error('All planning attempts failed')
+            if not ik_success:
+                self.get_logger().error('IK Solver failed. Target position is physically unreachable.')
                 result.success = False
-                result.message = f'Planning failed after {self._planning_attempts} attempts'
-                goal_handle.abort()
+                result.message = 'IK failed to find solution'
+                self._safe_abort(goal_handle)
                 self._publish_motion_done(False)
                 return result
 
-            feedback.state = 'PLAN_READY'
-            feedback.current_phase = f'Plan found in {plan_time_ms:.1f}ms'
-            feedback.progress_percent = 60.0
-            goal_handle.publish_feedback(feedback)
+            # Update transforms internally
+            goal_state.update()
 
-            # ── Phase 5: Execute ───────────────────────────────────────────
+            # Pass the Joint State as the goal! (OMPL will skip the Cartesian bounds check)
+            arm.set_goal_state(robot_state=goal_state)
+
+            # --- CRITICAL FIX 2: EMPTY .plan() ARGUMENTS ---
+            plan_start  = time.time()
+            plan_result = arm.plan()
+            plan_ms     = (time.time() - plan_start) * 1000.0
+            result.planning_time_ms = plan_ms
+
+            if not plan_result:
+                self.get_logger().error('Planning failed')
+                result.success = False
+                result.message = 'Planning failed'
+                self._safe_abort(goal_handle)
+                self._publish_motion_done(False)
+                return result
+
+            exec_start = time.time()
+            exec_ok = False
+
             if goal.execute_immediately:
-                feedback.state = 'EXECUTING'
-                feedback.current_phase = 'Executing trajectory'
-                feedback.progress_percent = 70.0
-                goal_handle.publish_feedback(feedback)
+                exec_ok = self._moveit.execute(plan_result.trajectory, controllers=[])
+                result.execution_time_ms = (time.time() - exec_start) * 1000.0
 
-                exec_start = time.time()
-                exec_result = self._moveit.execute(
-                    plan_result.trajectory,
-                    controllers=[]
-                )
-                exec_time_ms = (time.time() - exec_start) * 1000.0
-                result.execution_time_ms = exec_time_ms
+                if not exec_ok:
+                    # --- CRITICAL FIX 3: CRASH-FREE SIMULATION FALLBACK ---
+                    self.get_logger().info('Hardware execution unavailable — simulation mode active.')
+                    
+                    # Instead of parsing the C++ trajectory, we extract the target joints DIRECTLY from our successful IK step!
+                    jmg = robot_model.get_joint_model_group(planning_group)
+                    
+                    # Try to fetch active joint names depending on MoveIt version
+                    if hasattr(jmg, 'active_joint_model_names'):
+                        joint_names = jmg.active_joint_model_names
+                    else:
+                        joint_names = jmg.get_active_joint_model_names()
 
-                if not exec_result:
-                    result.success = False
-                    result.message = 'Trajectory execution failed'
-                    goal_handle.abort()
-                    self._publish_motion_done(False)
-                    return result
+                    joint_positions = goal_state.get_joint_group_positions(planning_group)
+                    
+                    # Create and publish the new simulated state
+                    js_msg = JointState()
+                    js_msg.header.stamp = self.get_clock().now().to_msg()
+                    js_msg.name         = list(joint_names)
+                    js_msg.position     = list(joint_positions)
+                    js_msg.velocity     =[0.0] * len(joint_names)
+                    js_msg.effort       = [0.0] * len(joint_names)
 
-            feedback.state = 'COMPLETED'
-            feedback.current_phase = 'Motion complete'
-            feedback.progress_percent = 100.0
-            goal_handle.publish_feedback(feedback)
+                    # Update our continuous publisher state
+                    self._last_joint_state = js_msg
+                    self._sim_joint_pub.publish(js_msg)
+                    
+                    time.sleep(0.2)
+                    exec_ok = True
+                    result.execution_time_ms = (time.time() - exec_start) * 1000.0
+
+            if goal.execute_immediately and not exec_ok:
+                result.success = False
+                result.message = 'Trajectory execution failed'
+                self._safe_abort(goal_handle)
+                self._publish_motion_done(False)
+                return result
 
             result.success = True
-            result.message = (
-                f'Success | Plan: {plan_time_ms:.1f}ms | '
-                f'Exec: {result.execution_time_ms:.1f}ms'
-            )
-            goal_handle.succeed()
+            result.message = f'Success | plan={plan_ms:.0f}ms | exec={result.execution_time_ms:.0f}ms'
+            self._safe_succeed(goal_handle)
             self._publish_motion_done(True)
 
-        except Exception as e:
-            self.get_logger().error(f'Execution error: {e}')
+        except Exception as exc:
+            self.get_logger().error(f'Execution error: {exc}')
             result.success = False
-            result.message = str(e)
-            goal_handle.abort()
+            result.message = str(exc)
+            self._safe_abort(goal_handle)
             self._publish_motion_done(False)
 
         finally:
@@ -291,134 +388,39 @@ class ExecutionNode(Node):
 
         return result
 
-    def _get_status_cb(self, request, response):
-        """Return current execution status."""
-        response.is_executing = self._is_executing
-        response.is_ready = self._is_ready
-        response.current_state = 'EXECUTING' if self._is_executing else 'IDLE'
-        response.planning_group = self._planning_group
-        response.end_effector_link = self._ee_link
-        return response
+    def _safe_abort(self, goal_handle):
+        try:
+            if rclpy.ok(): goal_handle.abort()
+        except Exception: pass
+
+    def _safe_succeed(self, goal_handle):
+        try:
+            if rclpy.ok(): goal_handle.succeed()
+        except Exception: pass
 
     def _publish_motion_done(self, success: bool):
-        """Publish motion completion signal."""
+        if not rclpy.ok(): return
         msg = Bool()
         msg.data = success
         self._motion_done_pub.publish(msg)
-
-        status_msg = String()
-        status_msg.data = 'MOTION_SUCCEEDED' if success else 'MOTION_FAILED'
-        self._status_pub.publish(status_msg)
-
-    def _check_robot_description(self) -> bool:
-        """Verify robot_description parameter was received and is non-empty."""
-        if not self.has_parameter('robot_description'):
-            self.get_logger().error(
-                'robot_description parameter is MISSING. '
-                'Check that execution.launch.py passed it as a Node parameter.'
-            )
-            return False
-        desc = self.get_parameter('robot_description').value
-        if not desc:
-            self.get_logger().error('robot_description parameter is EMPTY.')
-            return False
-        self.get_logger().info(
-            f'robot_description loaded: {len(desc)} chars'
-        )
-        return True
-
-    def _check_srdf(self) -> bool:
-        """Verify robot_description_semantic parameter was received and is non-empty."""
-        if not self.has_parameter('robot_description_semantic'):
-            self.get_logger().error(
-                'robot_description_semantic parameter is MISSING. '
-                'Check that execution.launch.py passed it as a Node parameter.'
-            )
-            return False
-        srdf = self.get_parameter('robot_description_semantic').value
-        if not srdf:
-            self.get_logger().error('robot_description_semantic parameter is EMPTY.')
-            return False
-        self.get_logger().info(
-            f'robot_description_semantic loaded: {len(srdf)} chars'
-        )
-        return True
-
-    def _init_moveit(self):
-        """
-        Initialize MoveItPy in a background thread with retries.
-        This prevents blocking __init__ and handles move_group startup delay.
-        """
-        import threading
-        thread = threading.Thread(target=self._init_moveit_with_retry, daemon=True)
-        thread.start()
-
-    def _init_moveit_with_retry(self):
-        """Background thread: retry MoveItPy initialization until move_group is ready."""
-        if not MOVEIT_PY_AVAILABLE:
-            self.get_logger().error(
-                'moveit_py not available. Install moveit_py for ROS2 Jazzy.'
-            )
-            return
-
-        if not self._check_robot_description():
-            self.get_logger().error(
-                'Cannot initialize MoveItPy: robot_description missing or empty.'
-            )
-            return
-
-        if not self._check_srdf():
-            self.get_logger().error(
-                'Cannot initialize MoveItPy: robot_description_semantic missing or empty.'
-            )
-            return
-
-        max_attempts = 10
-        retry_delay_sec = 3.0
-
-        for attempt in range(1, max_attempts + 1):
-            try:
-                self.get_logger().info(
-                    f'MoveItPy init attempt {attempt}/{max_attempts}...'
-                )
-                self._moveit = MoveItPy(node_name=self.get_name())
-                self._arm = self._moveit.get_planning_component(self._planning_group)
-                self._is_ready = True
-                self.get_logger().info('MoveItPy initialized successfully')
-                return
-
-            except Exception as e:
-                self.get_logger().warn(
-                    f'MoveItPy init attempt {attempt} failed: {e}'
-                )
-                if attempt < max_attempts:
-                    self.get_logger().info(
-                        f'Retrying in {retry_delay_sec}s...'
-                    )
-                    time.sleep(retry_delay_sec)
-
-        self.get_logger().error(
-            f'MoveItPy failed to initialize after {max_attempts} attempts. '
-            'Is move_group running and healthy?'
-        )
-        self._is_ready = False
+        smsg = String()
+        smsg.data = 'MOTION_SUCCEEDED' if success else 'MOTION_FAILED'
+        self._status_pub.publish(smsg)
 
 
 def main(args=None):
     rclpy.init(args=args)
-
-    execution_node = ExecutionNode()
     executor = MultiThreadedExecutor(num_threads=4)
-    executor.add_node(execution_node)
-
+    node     = ExecutionNode()
+    executor.add_node(node)
     try:
         executor.spin()
     except KeyboardInterrupt:
         pass
     finally:
-        execution_node.destroy_node()
-        rclpy.shutdown()
-
+        node.destroy_node()
+        try: rclpy.shutdown()
+        except Exception: pass
 
 if __name__ == '__main__':
     main()

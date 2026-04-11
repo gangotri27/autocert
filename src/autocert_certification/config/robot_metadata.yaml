@@ -1,26 +1,35 @@
-# Robot Metadata Template
-
-# Robot identification
 manufacturer: "ROBOTIS"
-model: "OMX-6DOF"
-serial_number: ""
-software_version: "4"
-
-# Physical specifications
-payload_kg: 5.0
-reach_m: 0.85
-
-# Controller information
-controller_version: "CB3.12"
-
-# Test conditions
+model: "OMX-6DOF-R1"
+serial_number: "OMX-DEMO-001"
+software_version: "1.0"
+subtitle: "6-DOF Upgraded Edition"
+safety_rating: "Uncertified (Research use only)"
+repo_url: "https://github.com/KMTI-ROBOPARADIGM/omx-wrist-roll-original"
+repo_url_short: "github.com/KMTI-ROBOPARADIGM/omx-wrist-roll-original"
+payload_kg: 0.3
+reach_m: 0.485
+weight_kg: 0.63
+material: "High-strength polymer (PLA) + metal fasteners"
+dof: 6
+max_tcp_speed: 0.3
+max_joint_speed: 275
+input_voltage: "12 V DC"
+power_consumption: "35 W"
+max_power: "120 W"
+communication: "TTL Multi-Drop Bus"
+ip_rating: "IP20"
+noise_db: "< 60 dB(A)"
+footprint: "Ø150 mm"
+cable_length: "1 m"
+company: "KMTI RoboParadigm Lab"
+phone: "+91-9876543210"
+email: "research@domain.edu"
+website: "www.autocert.com"
+country: "India"
 laboratory: "AutoCert Lab"
-technician: "Automated System"
-temperature: 20.5
+technician: "AutoCert System"
+temperature: 22.5
 humidity: 45
 measurement_system: "Leica AT960"
 calibration_date: "2024-01-15"
-
-# Robot model files (for hash computation)
-urdf_file: "~/autocert_ws/install/autocert_share/urdf/robot.urdf"
-srdf_file: "~/autocert_ws/install/autocert_share/config/robot.srdf"
+cube_size_mm: 50
