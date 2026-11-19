@@ -1,0 +1,271 @@
+# 5. AWS – Cloud Deployment Using EC2 (20 Marks)
+
+Objective: Launch an Ubuntu EC2 instance on AWS and deploy the Vehicle Rental Management System from GitHub using Apache Tomcat.
+
+## Step 1: Log in to AWS
+
+1. Open [AWS Management Console](<https://aws.amazon.com/console/?utm_source=chatgpt.com>).
+2. Log in to your AWS account.
+3. Search for EC2.
+4. Select EC2 Dashboard.
+5. Choose a region (e.g., Asia Pacific – Mumbai `ap-south-1`).
+
+## Step 2: Launch an Ubuntu EC2 Instance
+
+Launching an Amazon EC2 Instance: A Strategic Deep Dive for Decision-Makers - DEV Community
+
+[dev.to](<https://dev.to/yugjadvani/launching-an-amazon-ec2-instance-a-strategic-deep-dive-for-decision-makers-15fh?utm_source=chatgpt.com>)
+
+1. Click Launch Instance.
+2. Enter the instance name: `Vehicle-Rental-Server`.
+3. Under Application and OS Images, select:
+   - Ubuntu Server 22.04 LTS.
+4. Select instance type:
+   - `t2.micro` (if eligible for your account).
+5. Create a new key pair:
+   - Key pair name: `vehicle-rental-key`
+   - Key pair type: RSA
+   - Private key format: `.pem`
+6. Download the key pair and save it safely.
+
+## Step 3: Configure Security Group
+
+Setup Jenkins on Red-hat Linux EC2 instance — CodeWithMuh
+
+[codewithmuh.com](<https://codewithmuh.com/blog/setup-jenkins-on-red-hat-linux-ec2-instance?utm_source=chatgpt.com>)
+
+Add the following inbound rules:
+
+| Type | Port | Source |
+| --- | --- | --- |
+| SSH | 22 | My IP |
+| HTTP | 80 | 0.0.0.0/0 |
+| Custom TCP (Tomcat) | 8080 | 0.0.0.0/0 |
+
+1. Under Network Settings, select Create security group.
+2. Add the inbound rules above.
+3. Keep SSH restricted to your own IP address.
+4. Click Launch Instance.
+
+## Step 4: Connect to EC2 Instance
+
+1. Go to EC2 → Instances.
+2. Select `Vehicle-Rental-Server`.
+3. Wait until Instance State shows Running.
+4. Wait until Status Checks shows 2/2 checks passed.
+5. Click Connect.
+6. Select EC2 Instance Connect.
+7. Click Connect.
+
+Better alternatives for bastion host | ElasticScale
+
+[elasticscale.com](<https://elasticscale.com/blog/you-do-not-need-that-bastion-host-there-are-better-alternatives/?utm_source=chatgpt.com>)
+
+## Step 5: Install Java and Required Packages
+
+Execute these commands in the EC2 terminal:
+
+bash
+
+```bash
+sudo apt update
+
+sudo apt install openjdk-17-jdk -y
+
+java -version
+
+sudo apt install maven git wget -y
+```
+
+## Step 6: Install Apache Tomcat
+
+bash
+
+```bash
+cd /tmp
+
+wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.102/bin/apache-tomcat-9.0.102.tar.gz
+
+sudo tar -xvzf apache-tomcat-9.0.102.tar.gz -C /opt/
+
+sudo mv /opt/apache-tomcat-9.0.102 /opt/tomcat
+```
+
+Start Tomcat:
+
+bash
+
+```bash
+sudo chmod +x /opt/tomcat/bin/*.sh
+
+sudo /opt/tomcat/bin/startup.sh
+```
+
+## Step 7: Clone the GitHub Repository
+
+bash
+
+```bash
+cd /home/ubuntu
+
+git clone https://github.com/nikithamoturi/VehicleRentalManagementSystem.git
+
+cd VehicleRentalManagementSystem
+```
+
+## Step 8: Build the Maven Project
+
+Execute:
+
+bash
+
+```bash
+mvn clean package
+```
+
+Wait until the build finishes successfully.
+
+Expected resulttext
+
+```text
+BUILD SUCCESS
+```
+
+## Step 9: Deploy the WAR File to Tomcat
+
+Find the generated WAR file:
+
+bash
+
+```bash
+find . -name "*.war"
+```
+
+Copy the generated WAR file into Tomcat's webapps directory:
+
+bash
+
+```bash
+sudo cp target/*.war /opt/tomcat/webapps/
+```
+
+Restart Tomcat:
+
+bash
+
+```bash
+sudo /opt/tomcat/bin/shutdown.sh
+
+sudo /opt/tomcat/bin/startup.sh
+```
+
+## Step 10: Access the Application in Browser
+
+1. Go to AWS → EC2 → Instances.
+2. Copy the Public IPv4 address of your instance.
+3. Open your browser.
+4. Enter:
+
+text
+
+```text
+http://YOUR-PUBLIC-IP:8080/
+```
+
+If your WAR file is named `VehicleRentalManagementSystem.war`, access it using:
+
+text
+
+```text
+http://YOUR-PUBLIC-IP:8080/VehicleRentalManagementSystem/
+```
+
+Install Apache Tomcat server. Apache Tomcat server is an application… | by Deepeemai | Medium
+
+[medium.com](<https://medium.com/%40deepeemai23/apache-tomcat-server-803539119b91?utm_source=chatgpt.com>)
+
+## Step 11: Verify Application Status
+
+Run:
+
+bash
+
+```bash
+sudo systemctl status tomcat
+```
+
+If Tomcat was installed manually as above, check using:
+
+bash
+
+```bash
+ps aux | grep tomcat
+```
+
+Check port 8080:
+
+bash
+
+```bash
+sudo ss -tlnp | grep 8080
+```
+
+Check Tomcat logs:
+
+bash
+
+```bash
+sudo tail -f /opt/tomcat/logs/catalina.out
+```
+
+## Scenario-Based Questions and Answers
+
+1. Which EC2 or security group configuration issues could prevent customers from opening the rental portal?
+
+- Incorrect security group inbound rules.
+- Port 8080 not allowed.
+- Incorrect public IP address.
+- Instance not running.
+- Incorrect network ACL or routing configuration.
+
+2. Why should the company allow SSH access only from trusted administrative addresses?
+
+- Prevents unauthorized access.
+- Reduces security risks.
+- Protects application files and customer information.
+- Minimizes brute-force login attempts.
+
+3. What would customers observe if Tomcat stops while the EC2 instance continues to run?
+
+- The EC2 instance remains running.
+- The application becomes unavailable.
+- Customers may see connection refused or timeout errors.
+
+4. How could the company handle an increase in customer requests during holiday periods?
+
+- Increase EC2 instance capacity.
+- Use Auto Scaling Groups.
+- Add multiple EC2 instances.
+- Use an Application Load Balancer.
+
+5. Why might multiple EC2 instances behind a load balancer be preferred for a customer-facing rental portal?
+
+- Distributes incoming traffic.
+- Improves application availability.
+- Supports increased customer requests.
+- Provides fault tolerance.
+- Reduces the impact of individual instance failures.
+
+## Final Verification Checklist
+
+- [ ]Ubuntu EC2 instance launched successfully.
+- [ ]Security group configured.
+- [ ]Java and Maven installed.
+- [ ]Tomcat installed and running.
+- [ ]GitHub repository cloned.
+- [ ]Maven build completed successfully.
+- [ ]WAR file deployed to Tomcat.
+- [ ]Application opened successfully in browser.
+- [ ]Tomcat logs checked.
+
+Note: If the application uses MySQL, configure a MySQL database separately and update the application's database connection settings before expecting database-dependent features to work.
